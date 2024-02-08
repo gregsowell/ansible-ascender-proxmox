@@ -3,10 +3,10 @@
   hosts: localhost
   gather_facts: false
   vars:
-    # Configure the api connection info for proxmox host
-    api_user: "{{ gen1_user }}"
-    api_password: "{{ gen1_pword }}"
-    api_host: proxmox.gregsowell.com
+    # # Configure the api connection info for proxmox host
+    # api_user: "{{ gen1_user }}"
+    # api_password: "{{ gen1_pword }}"
+    # api_host: proxmox.gregsowell.com
 
     # Configure template to clone for new vm
     clone_template: rocky9-template
@@ -32,7 +32,7 @@
       api_host: proxmox.gregsowell.com
       clone: "{{ clone_template }}"
       name: "{{ vm_name }}"
-      # node: sabrewulf
+      node: proxmox
       storage: "{{ storage_location }}"
       format: "{{ vm_format }}"
       timeout: 500
