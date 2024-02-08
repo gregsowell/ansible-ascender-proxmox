@@ -27,6 +27,9 @@
       # api_user: root@pam
       # api_password: secret
       # api_host: helldorado
+      api_user: "{{ gen1_user }}"
+      api_password: "{{ gen1_pword }}"
+      api_host: proxmox.gregsowell.com
       clone: "{{ clone_template }}"
       name: "{{ vm_name }}"
       # node: sabrewulf
