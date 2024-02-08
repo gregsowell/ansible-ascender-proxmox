@@ -1,6 +1,6 @@
 ---
 - name: create and control a VM on proxmox using Ascender
-  hosts: proxmox.gregsowell.com
+  hosts: localhost
   gather_facts: false
   vars:
     # # Configure the api connection info for proxmox host
