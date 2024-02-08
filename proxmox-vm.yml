@@ -1,0 +1,37 @@
+---
+- name: create and control a VM on proxmox using Ascender
+  hosts: localhost
+  gather_facts: false
+  vars:
+    # Configure the api connection info for proxmox host
+    api_user: "{{ gen1_user }}"
+    api_password: "{{ gen1_pword }}"
+    api_host: proxmox.gregsowell.com
+
+    # Configure template to clone for new vm
+    clone_template: rocky9-template
+
+    # Configure location on Host to store new vm
+    storage_location: local-lvm
+
+    # Linked Clone needs format=unspecified and full=false
+    # Format of new VM
+    vm_format: qcow2
+
+    # Default name to use for the VM
+    vm_name: test-rocky9
+
+  tasks:
+  - name: Create a VM based on a template
+    community.general.proxmox_kvm:
+      # api_user: root@pam
+      # api_password: secret
+      # api_host: helldorado
+      clone: "{{ clone_template }}"
+      name: "{{ vm_name }}"
+      # node: sabrewulf
+      storage: "{{ storage_location }}"
+      format: "{{ vm_format }}"
+      timeout: 500
+  #start a VM
+  #stop a VM
