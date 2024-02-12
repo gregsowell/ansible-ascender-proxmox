@@ -21,6 +21,10 @@
     # Default name to use for the VM
     vm_name: test-rocky9
 
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html#examples
+
   tasks:
   - name: Create a VM based on a template
     community.general.proxmox_kvm:
