@@ -44,6 +44,12 @@
       storage: "{{ storage_location }}"
       format: "{{ vm_format }}"
       timeout: 500
-      state: started
   #start a VM
+
+  - name: Start VM
+    community.general.proxmox_kvm:
+      <<: *proxmox_auth
+      name: "{{ vm_name }}"
+      node: proxmox
+      state: started
   #stop a VM
