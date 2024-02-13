@@ -8,7 +8,7 @@
       api_user: "{{ gen1_user }}"
       api_password: "{{ gen1_pword }}"
       api_host: proxmox.gregsowell.com
-      validate_certs: true
+      
 
     # Configure template to clone for new vm
     clone_template: rocky9-template
