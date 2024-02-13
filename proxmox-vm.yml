@@ -28,11 +28,9 @@
     vm_name: test-rocky9
 
     # Switches for playbook control
-    # Should we provision a VM
-    vm_provision: true
-    # Should a VM simply be started/stopped
-    vm_start: false
-    vm_stop: false
+#    vm_action: provision
+    # vm_action: start
+    # vm_action: stop
 
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
@@ -40,7 +38,7 @@
 
   tasks:
   - name: Block for creating a vm
-    when: vm_provision
+    when: vm_action == "provision"
     block:
     - name: Create a VM based on a template
       community.general.proxmox_kvm:
@@ -60,7 +58,7 @@
         seconds: 10
 
   - name: Start VM
-    when: vm_provision or vm_start
+    when: vm_action == "provision" or vm_action == "start"
     community.general.proxmox_kvm:
       <<: *proxmox_auth
       name: "{{ vm_name }}"
@@ -68,7 +66,7 @@
       state: started
 
   - name: Stop VM
-    when: vm_stop
+    when: vm_action == "stop"
     community.general.proxmox_kvm:
       <<: *proxmox_auth
       name: "{{ vm_name }}"
