@@ -31,6 +31,7 @@
 #    vm_action: provision
     # vm_action: start
     # vm_action: stop
+    # vm_action: delete
 
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
@@ -66,9 +67,17 @@
       state: started
 
   - name: Stop VM
-    when: vm_action == "stop"
+    when: vm_action == "stop" or vm_action == "delete" 
     community.general.proxmox_kvm:
       <<: *proxmox_auth
       name: "{{ vm_name }}"
       node: proxmox
       state: stopped
+
+  - name: Delete VM
+    when: vm_action == "delete"
+    community.general.proxmox_kvm:
+      <<: *proxmox_auth
+      name: "{{ vm_name }}"
+      node: proxmox
+      state: absent
