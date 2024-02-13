@@ -1,5 +1,5 @@
 ---
-- name: create and control a VM on proxmox using Ascender
+- name: Create and control VMs on proxmox using Ascender
   hosts: localhost
   gather_facts: false
   vars:
