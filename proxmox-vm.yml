@@ -30,8 +30,9 @@
     # Switches for playbook control
     # Should we provision a VM
     vm_provision: true
-    # Should a VM simply be started
-    # vm_start: true
+    # Should a VM simply be started/stopped
+    vm_start: false
+    vm_stop: false
 
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
