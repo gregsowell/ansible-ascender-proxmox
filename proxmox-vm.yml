@@ -5,7 +5,7 @@
   vars:
     # Configure the api connection info for proxmox host
     proxmox_auth: &proxmox_auth
-      api_user: "{{ gen1_user }}"
+      # api_user: "{{ gen1_user }}"
       # api_user: root@pam
       # api_password: "{{ gen1_pword }}"
       api_host: proxmox.gregsowell.com
