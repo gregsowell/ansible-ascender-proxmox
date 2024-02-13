@@ -26,6 +26,12 @@
 
     # Default name to use for the VM
     vm_name: test-rocky9
+
+    # How many cores
+    # vm_cores: 2
+
+    # How many vcpus:
+    # vm_vcpus: 2
     
     # Options for specifying network interface type
     #vm_net0: 'virtio,bridge=vmbr0'
@@ -64,13 +70,14 @@
           net0: "{{ vm_net0 | default(omit) }}"
         ipconfig:
           ipconfig0: "{{ vm_ipconfig0 | default(omit) }}"
+      register: vm_provision_info
 
     - name: Pause after provision to give the API a chance to catch up
       ansible.builtin.pause:
         seconds: 10
 
   - name: Start VM
-    when: vm_action == "provision" or vm_action == "start"
+    when: (vm_action == "provision" and vm_provision_info.changed) or vm_action == "start"
     community.general.proxmox_kvm:
       <<: *proxmox_auth
       name: "{{ vm_name }}"
