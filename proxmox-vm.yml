@@ -27,33 +27,49 @@
     # Default name to use for the VM
     vm_name: test-rocky9
 
+    # Switches for playbook control
+    # Should we provision a VM
+    vm_provision: true
+    # Should a VM simply be started
+    # vm_start: true
+
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
 # https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html#examples
 
   tasks:
-  - name: Create a VM based on a template
-    community.general.proxmox_kvm:
-      # api_user: root@pam
-      # api_password: secret
-      # api_host: helldorado
-      <<: *proxmox_auth
-      clone: "{{ clone_template }}"
-      name: "{{ vm_name }}"
-      node: proxmox
-      storage: "{{ storage_location }}"
-      format: "{{ vm_format }}"
-      timeout: 500
-  #start a VM
+  - name: Block for creating a vm
+    when: vm_provision
+    block:
+    - name: Create a VM based on a template
+      community.general.proxmox_kvm:
+        # api_user: root@pam
+        # api_password: secret
+        # api_host: helldorado
+        <<: *proxmox_auth
+        clone: "{{ clone_template }}"
+        name: "{{ vm_name }}"
+        node: proxmox
+        storage: "{{ storage_location }}"
+        format: "{{ vm_format }}"
+        timeout: 500
 
-  - name: Pause after provision to give the API a chance to catch up
-    ansible.builtin.pause:
-      seconds: 20
-      
+    - name: Pause after provision to give the API a chance to catch up
+      ansible.builtin.pause:
+        seconds: 10
+
   - name: Start VM
+    when: vm_provision or vm_start
     community.general.proxmox_kvm:
       <<: *proxmox_auth
       name: "{{ vm_name }}"
       node: proxmox
       state: started
-  #stop a VM
+
+  - name: Stop VM
+    when: vm_stop
+    community.general.proxmox_kvm:
+      <<: *proxmox_auth
+      name: "{{ vm_name }}"
+      node: proxmox
+      state: stopped
