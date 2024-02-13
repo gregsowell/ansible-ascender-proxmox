@@ -5,10 +5,12 @@
   vars:
     # Configure the api connection info for proxmox host
     proxmox_auth: &proxmox_auth
-      api_user: "{{ gen1_user }}"
-      # api_user: root@pam
-      api_password: "{{ gen1_pword }}"
       api_host: proxmox.gregsowell.com
+      api_user: "{{ gen1_user }}"
+      # api_user: root@pam # username format example
+      # Use standard password
+      api_password: "{{ gen1_pword }}"
+      # Use api token and secret - example format
       # api_token_id: gregisa5.0
       # api_token_secret: 72a72987-ff68-44f1-9fee-c09adaaecf4d
 
