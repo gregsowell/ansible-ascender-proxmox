@@ -46,6 +46,10 @@
       timeout: 500
   #start a VM
 
+  - name: Pause after provision to give the API a chance to catch up
+    ansible.builtin.pause:
+      seconds: 20
+      
   - name: Start VM
     community.general.proxmox_kvm:
       <<: *proxmox_auth
