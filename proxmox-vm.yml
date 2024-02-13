@@ -26,9 +26,14 @@
 
     # Default name to use for the VM
     vm_name: test-rocky9
+    
+    # Options for specifying network interface type
+    #vm_net0: 'virtio,bridge=vmbr0'
+
+    #vm_ipconfig0: 'ip=192.168.1.1/24,gw=192.168.1.1'
 
     # Switches for playbook control
-#    vm_action: provision
+    # vm_action: provision
     # vm_action: start
     # vm_action: stop
     # vm_action: delete
@@ -53,6 +58,12 @@
         storage: "{{ storage_location }}"
         format: "{{ vm_format }}"
         timeout: 500
+        cores: "{{ vm_cores | default(omit) }}"
+        vcpus: "{{ vm_vcpus | default(omit) }}"
+        net:
+          net0: "{{ vm_net0 | default(omit) }}"
+        ipconfig:
+          ipconfig0: "{{ vm_ipconfig0 | default(omit) }}"
 
     - name: Pause after provision to give the API a chance to catch up
       ansible.builtin.pause:
