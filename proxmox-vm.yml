@@ -7,12 +7,10 @@
     proxmox_auth: &proxmox_auth
       # api_user: "{{ gen1_user }}"
       api_user: root@pam
-      # api_password: "{{ gen1_pword }}"
+      api_password: "{{ gen1_pword }}"
       api_host: proxmox.gregsowell.com
-      # api_token_id: root@pam!gregisa5.0
-      api_token_id: gregisa5.0
-      # api_token_id: root!gregisa5.0
-      api_token_secret: 72a72987-ff68-44f1-9fee-c09adaaecf4d
+      # api_token_id: gregisa5.0
+      # api_token_secret: 72a72987-ff68-44f1-9fee-c09adaaecf4d
 
     # Configure template to clone for new vm
     clone_template: rocky9-template
