@@ -44,5 +44,6 @@
       storage: "{{ storage_location }}"
       format: "{{ vm_format }}"
       timeout: 500
+      state: started
   #start a VM
   #stop a VM
