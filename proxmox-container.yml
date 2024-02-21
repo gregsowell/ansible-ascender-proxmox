@@ -83,7 +83,6 @@
       hostname: "{{ con_hostname }}"
       node: proxmox
       state: stopped
-    
 
   - name: Delete container block
     when: con_action == "delete"
