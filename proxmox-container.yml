@@ -57,6 +57,7 @@
         <<: *proxmox_auth
         hostname: "{{ con_hostname }}"
         node: proxmox
+        ostemplate: "{{ clone_template }}"
       register: con_provision_info
 
     - name: Pause after provision to give the API a chance to catch up
