@@ -1,0 +1,102 @@
+---
+- name: Create and control containers on proxmox using Ascender
+  hosts: localhost
+  gather_facts: false
+  vars:
+    # Configure the api connection info for proxmox host
+    proxmox_auth: &proxmox_auth
+      api_host: proxmox.gregsowell.com
+      api_user: "{{ gen1_user }}"
+      # api_user: root@pam # username format example
+      # Use standard password
+      api_password: "{{ gen1_pword }}"
+      # Use api token and secret - example format
+      # api_token_id: gregisa5.0
+      # api_token_secret: 72a72987-ff68-44f1-9fee-c09adaaecf4d
+
+    # Configure template to clone for new container
+    clone_template: 'local:rockylinux-9-default_20221109_amd64.tar.xz'
+
+    # # Configure location on Host to store new vm
+    # storage_location: local-lvm
+
+    # # Linked Clone needs format=unspecified and full=false
+    # # Format of new VM
+    # vm_format: qcow2
+
+    # Default name to use for the VM
+    con_hostname: test-rocky9-container
+
+    # How many cores
+    # vm_cores: 2
+
+    # How many vcpus:
+    # vm_vcpus: 2
+    
+    # Options for specifying network interface type
+    #vm_net0: 'virtio,bridge=vmbr0'
+
+    #vm_ipconfig0: 'ip=192.168.1.1/24,gw=192.168.1.1'
+
+    # Switches for playbook control
+    # con_action: provision
+    # con_action: start
+    # con_action: stop
+    # con_action: delete
+
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_kvm_module.html#examples
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_vm_info_module.html#examples
+# https://docs.ansible.com/ansible/latest/collections/community/general/proxmox_module.html#examples
+
+  tasks:
+  - name: Block for creating a container
+    when: con_action == "provision"
+    block:
+    - name: Create a container based on a template
+      community.general.proxmox:
+        <<: *proxmox_auth
+        hostname: "{{ con_hostname }}"
+        node: proxmox
+      register: con_provision_info
+
+    - name: Pause after provision to give the API a chance to catch up
+      ansible.builtin.pause:
+        seconds: 10
+
+  # - name: Start VM
+  #   when: (con_action == "provision" and vm_provision_info.changed) or con_action == "start"
+  #   community.general.proxmox_kvm:
+  #     <<: *proxmox_auth
+  #     name: "{{ vm_name }}"
+  #     node: proxmox
+  #     state: started
+
+  # - name: Stop VM
+  #   when: con_action == "stop"
+  #   community.general.proxmox_kvm:
+  #     <<: *proxmox_auth
+  #     name: "{{ vm_name }}"
+  #     node: proxmox
+  #     state: stopped
+
+  # - name: Delete VM block
+  #   when: con_action == "delete"
+  #   block:
+  #   - name: Stop VM with force
+  #     community.general.proxmox_kvm:
+  #       <<: *proxmox_auth
+  #       name: "{{ vm_name }}"
+  #       node: proxmox
+  #       state: stopped
+  #       force: true
+
+  #   - name: Pause to allow shutdown to complete
+  #     ansible.builtin.pause:
+  #       seconds: 10
+
+  #   - name: Delete VM
+  #     community.general.proxmox_kvm:
+  #       <<: *proxmox_auth
+  #       name: "{{ vm_name }}"
+  #       node: proxmox
+  #       state: absent
