@@ -27,6 +27,9 @@
     # Default name to use for the VM
     con_hostname: test-rocky9-container
 
+    # Container storage volume
+    con_storage: local-lvm
+
     # How many cores
     # vm_cores: 2
 
@@ -58,20 +61,20 @@
         hostname: "{{ con_hostname }}"
         node: proxmox
         ostemplate: "{{ clone_template }}"
-        storage: local-lvm
+        storage: "{{ con_storage }}"
       register: con_provision_info
 
     - name: Pause after provision to give the API a chance to catch up
       ansible.builtin.pause:
         seconds: 10
 
-  # - name: Start VM
-  #   when: (con_action == "provision" and vm_provision_info.changed) or con_action == "start"
-  #   community.general.proxmox_kvm:
-  #     <<: *proxmox_auth
-  #     name: "{{ vm_name }}"
-  #     node: proxmox
-  #     state: started
+  - name: Start container
+    when: (con_action == "provision" and con_provision_info.changed) or con_action == "start"
+    community.general.proxmox:
+      <<: *proxmox_auth
+      hostname: "{{ con_hostname }}"
+      node: proxmox
+      state: started
 
   # - name: Stop VM
   #   when: con_action == "stop"
